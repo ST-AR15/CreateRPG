@@ -2,6 +2,8 @@
 let mapW = 120;
 let gameW = 1000;
 let gameH = 800;
+
+let mapNow = 'test';
 // 地图信息
 let mapModel = {
     normalFloor: {
@@ -32,6 +34,20 @@ function gameInit() {
     createObject('test', 3, 3, mapModel.flower);
     createObject('test', 4, 4, mapModel.flower);
     createPlayer('test', 1, 1, playerModel.main);
+    window.onkeydown = function(e) {
+        if(e.keyCode == 37) {
+            playerMove('left', 300);
+        }
+        if(e.keyCode == 38) {
+            playerMove('up', 300);
+        }
+        if(e.keyCode == 39) {
+            playerMove('right', 300);
+        }
+        if(e.keyCode == 40) {
+            playerMove('down', 300);
+        }
+    }
 }
 /**
  * 创建地图
@@ -101,7 +117,64 @@ function createPlayer(name, x, y, model) {
         playerStatus: 1,
         playerAniStatus: 2,
         time: 0,
+        isMove: true,
     };
+}
+/**
+ * 控制角色移动
+ * @param {String} direction 角色的移动方向，有left，right，up，down四个选项
+ * @param {Number} time 完成本次移动的时间（单位毫秒）
+ */
+// TODO 解决react视图更新问题
+function playerMove(direction, time) {
+    let player = mapInfo[mapNow].player;
+    // 只有在可移动的情况下才能移动
+    if(player.isMove) {
+        player.time = time;
+        player.isMove = false;
+        if(direction == 'left') {
+            player.playerStatus = 2;
+            player.placeX--;
+            console.log('开始往左走');
+        }
+        else if(direction == 'right') {
+            player.playerStatus = 3;
+            player.placeX++;
+            console.log('开始往右走');
+        }
+        else if(direction == 'up') {
+            player.playerStatus = 4;
+            player.placeY--;
+            console.log('开始往上走');
+        }
+        else if(direction == 'down') {
+            player.playerStatus = 1;
+            player.placeY++;
+            console.log('开始往下走');
+        }
+        // console.log(player);
+        // mapInfo[mapNow].player = {};
+        // mapInfo[mapNow].player = player;
+        // else {
+        //     throw '请输入正确的方向！正确的输入应该为left, right, up和down四个中的一个'
+        // }
+        // 角色动作
+        let that = player;
+        setTimeout(() => {
+            that.playerAniStatus = 1;
+        }, time/4);
+        setTimeout(() => {
+            that.playerAniStatus = 2;
+        }, time*2/4);
+        setTimeout(() => {
+            that.playerAniStatus = 3;
+        }, time*3/4);
+        setTimeout(() => {
+            that.playerAniStatus = 2;
+            that.isMove = true;
+            console.log('走完了')
+        }, time);
+    }
 }
 
 // 页面
