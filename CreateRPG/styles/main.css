@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+body {
+    background-color: #000000;
+}
+.crpg-map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 10px solid #d45555;
+}
+.crpg-map > div {
+    position: absolute;
+}
+.crpg-person {
+    background-size: 300%;
+    transition-timing-function: linear;
+    transition-property: left, top;
+}
