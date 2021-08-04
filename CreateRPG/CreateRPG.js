@@ -90,7 +90,10 @@ function Menu() {
 // 游戏地图
 function GameMap(props) {
     return (
-        <div className="crpg-map">
+        <div className="crpg-map" style={{
+            width: (mapInfo[props.name].info.x * mapW) + 'px',
+            height: (mapInfo[props.name].info.y * mapW) + 'px',
+        }}>
             { mapInfo[props.name].detail.map(({placeX, placeY, model, isMove}) => {
                 return (
                     <div className="map-blank" key={ placeX + '-' + placeY } style={{
@@ -120,7 +123,10 @@ function Interactive() {
 function Game() {
     createMap('test', 10, 10, mapModel.normalFloor);
     return (
-        <div className="crpg-game">
+        <div className="crpg" style={{
+            width: gameW + 'px',
+            height: gameH + 'px',
+        }}>
             <Menu />
             <GameMap name="test" />
             <Interactive />

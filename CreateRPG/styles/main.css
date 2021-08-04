@@ -1,9 +1,8 @@
-* {
+.crpg {
     margin: 0;
     padding: 0;
-    user-select: none;
-}
-body {
+    position: relative;
+    overflow: hidden;
     background-color: #000000;
 }
 .crpg-map {
