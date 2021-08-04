@@ -17,6 +17,8 @@ let mapModel = {
         fileX: 2,
         fileY: 2,
         fileLength: 12,
+        sizeX: 2,
+        sizeY: 2,
     }
 }
 // 角色信息
@@ -222,7 +224,9 @@ function GameMap(props) {
                         top: (placeY-1) * mapW + 'px',
                         backgroundImage: 'url(' + model.file + ')',
                         backgroundPosition: (model.fileX-1)*(-mapW) + 'px' + ' ' + (model.fileY-1)*(-mapW) + 'px',
-                        backgroundSize: (model.fileLength*100) + '%'
+                        backgroundSize: (model.fileLength*100) + '%',
+                        transformOrigin: "left top",
+                        transform: `scaleX(${ model.sizeX }) scaleY(${ model.sizeY })`
                     }}></div>
                 )
             })}
