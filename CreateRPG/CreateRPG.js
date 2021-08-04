@@ -17,9 +17,22 @@ let mapModel = {
         fileLength: 12,
     }
 }
+// 角色信息
+let playerModel = {
+    main: {
+        file: "CreateRPG/model/character/main.png",
+    }
+};
 let mapInfo = {};
 
 // 可以使用的方法
+// 初始化游戏，一般是创建地图之类
+function gameInit() {
+    createMap('test', 10, 10, mapModel.normalFloor);
+    createObject('test', 3, 3, mapModel.flower);
+    createObject('test', 4, 4, mapModel.flower);
+    createPlayer('test', 1, 1, playerModel.main);
+}
 /**
  * 创建地图
  * @param {String} name 地图名字
@@ -79,6 +92,19 @@ function createObject(name, x, y, model) {
     })
 }
 
+function createPlayer(name, x, y, model) {
+    // 数据检测
+    mapInfo[name].player = {
+        placeX: x,
+        placeY: y,
+        model: model,
+        playerStatus: 1,
+        playerAniStatus: 2,
+        time: 0,
+    };
+}
+
+// 页面
 // 游戏菜单（进入页面）
 function Menu() {
     return (
@@ -128,7 +154,16 @@ function GameMap(props) {
                 )
             })}
             {/* 主角 */}
-
+            <div className="map-blank" style={{
+                width: mapW + 'px',
+                height: mapW + 'px',
+                left: (mapInfo[props.name].player.placeX-1) * mapW + 'px',
+                top: (mapInfo[props.name].player.placeY-1) * mapW + 'px',
+                backgroundPosition: (mapInfo[props.name].player.playerAniStatus-1)*(-mapW) + 'px' + ' ' + (mapInfo[props.name].player.playerStatus-1)*(-mapW) + 'px',
+                backgroundImage: 'url(' + mapInfo[props.name].player.model.file + ')',
+                transitionDuration: mapInfo[props.name].player.time + 'ms',
+                backgroundSize: '300%'
+            }}></div>
         </div>
     )
 }
@@ -143,9 +178,7 @@ function Interactive() {
 }
 
 function Game() {
-    createMap('test', 10, 10, mapModel.normalFloor);
-    createObject('test', 3, 3, mapModel.flower);
-    createObject('test', 4, 4, mapModel.flower);
+    gameInit();
     return (
         <div className="crpg" style={{
             width: gameW + 'px',
