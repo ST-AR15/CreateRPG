@@ -7,32 +7,17 @@ let mapModel = {
     normalFloor: {
         file: "CreateRPG/model/map/floor.png", // 模型图片名
         fileX: 1,          // 使用的那块是横向第几个
-        fileY: 1,          // 使用的那块是纵向第几个
+        fileY: 1.5,          // 使用的那块是纵向第几个
         fileLength: 8,     // 宽度上有多少个方块，通过这个来计算截取
+    },
+    flower: {
+        file: "CreateRPG/model/map/map-object2.png",
+        fileX: 2,
+        fileY: 2,
+        fileLength: 12,
     }
 }
-let mapInfo = {
-    // test: {
-    //     info: {
-    //         x: 10,
-    //         y: 10,
-    //     },
-    //     detail: [
-    //         {
-    //             placeX: 1,
-    //             placeY: 1,
-    //             model: mapModel.normalFloor,
-    //             isMove: true,
-    //         },
-    //         {
-    //             placeX: 2,
-    //             placeY: 1,
-    //             model: mapModel.normalFloor,
-    //             isMove: true,
-    //         },
-    //     ]
-    // }
-};
+let mapInfo = {};
 
 // 可以使用的方法
 /**
@@ -74,6 +59,26 @@ function createMap(name, width, height, model) {
     mapInfo[name] = info;
 }
 
+/**
+ * 为地图添加object
+ * @param {String} name 地图名字
+ * @param {Object} model 放上来的东西
+ * @param {Number} x 横向第几块
+ * @param {Number} y 纵向第几块
+ */
+// TODO 数据检测
+function createObject(name, x, y, model) {
+    // 如果存在，就是push
+    if(!mapInfo[name].obj) {
+        mapInfo[name].obj = [];
+    }
+    mapInfo[name].obj.push({
+        placeX: x,
+        placeY: y,
+        model: model,
+    })
+}
+
 // 游戏菜单（进入页面）
 function Menu() {
     return (
@@ -94,6 +99,7 @@ function GameMap(props) {
             width: (mapInfo[props.name].info.x * mapW) + 'px',
             height: (mapInfo[props.name].info.y * mapW) + 'px',
         }}>
+            {/* 地图的地面 */}
             { mapInfo[props.name].detail.map(({placeX, placeY, model, isMove}) => {
                 return (
                     <div className="map-blank" key={ placeX + '-' + placeY } style={{
@@ -107,6 +113,22 @@ function GameMap(props) {
                     }}></div>
                 )
             })}
+            {/* 地图的可交互物品 */}
+            { mapInfo[props.name].obj.map(({placeX, placeY, model}) => {
+                return (
+                    <div className="map-blank" key={ placeX + '-' + placeY } style={{
+                        width: mapW + 'px',
+                        height: mapW + 'px',
+                        left: (placeX-1) * mapW + 'px',
+                        top: (placeY-1) * mapW + 'px',
+                        backgroundImage: 'url(' + model.file + ')',
+                        backgroundPosition: (model.fileX-1)*(-mapW) + 'px' + ' ' + (model.fileY-1)*(-mapW) + 'px',
+                        backgroundSize: (model.fileLength*100) + '%'
+                    }}></div>
+                )
+            })}
+            {/* 主角 */}
+
         </div>
     )
 }
@@ -122,6 +144,8 @@ function Interactive() {
 
 function Game() {
     createMap('test', 10, 10, mapModel.normalFloor);
+    createObject('test', 3, 3, mapModel.flower);
+    createObject('test', 4, 4, mapModel.flower);
     return (
         <div className="crpg" style={{
             width: gameW + 'px',
